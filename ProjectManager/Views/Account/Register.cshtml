@@ -1,0 +1,54 @@
+﻿@model RegisterUserDto
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class=" text-primary">Create Project</h2>
+        </div>
+        <div class="mb-3 row pt-1">
+            <label asp-for="UserName" class="text-black p-0">Name</label>
+            <input asp-for="UserName" class=" form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3 row pt-1">
+            <label asp-for="Email" class="text-black p-0"></label>
+            <input asp-for="Email" class=" form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3 row pt-1">
+            <label asp-for="Password" class="text-black p-0"></label>
+            <input asp-for="Password" class=" form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3 row pt-1">
+            <label asp-for="ConfirmPassword" class="text-black p-0">Confirm Password</label>
+            <input asp-for="ConfirmPassword" class=" form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3 row pt-1">
+            <label asp-for="PhoneNumber" class="text-black p-0">Phone Number</label>
+            <input asp-for="PhoneNumber" class=" form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6 col-md-3 align-content-center">
+                <button type="submit" class="btn btn-primary form-control">Register</button>
+            </div>
+            <div class="col-6  col-md-3 ">
+                <a  asp-action="Login" class="border btn btn-outline-secondary form-control">
+                    Already Have Account?
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

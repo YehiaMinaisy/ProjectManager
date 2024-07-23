@@ -1,0 +1,143 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<ProjectManager.Models.ProjectTask>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<!-- Modal -->
+<div>
+    @* <div class="modal fade" id="subTaskDetailsModal" role="dialog" tabindex="-1" data-url="@Url.Action("PartialSubTaskDetails", "ProjectTasks")" aria-labelledby="employeeModalLabel" aria-hidden="true" > *@
+    <div class="modal fade" id="taskDetailsModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskDetailsModalLabel">Task Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    @* <span aria-hidden="true">&times;</span> *@
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- The partial view content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h1>Index</h1>
+
+<p>
+    <button class="btn btn-primary" onclick="openTaskDetailsModal()">Add Task</button>
+</p>
+<p>
+    <tr>
+
+        <td>
+            <label class="m-2"> Start Date</label>
+            <input class=" m-1" type="date" id="startDate" placeholder="Start Date" />
+            <label class="m-2"> End Date</label>
+            <input class=" m-1" type="date" id="endDate" placeholder="End Date" />
+            <button class="btn btn-outline-primary"
+                    onclick="filterTasks(document.getElementById('startDate').value ,document.getElementById('endDate').value)">
+                Filter
+            </button>
+        </td>
+
+    </tr>
+</p>
+<div id="TasksTable">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DueDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Project)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Parent)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DueDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Project.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Parent.Name)
+                    </td>
+                    <td>
+                        <a  asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="LeaveTask" asp-route-id="@item.Id">Leave Task</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function openTaskDetailsModal() {
+            $.ajax({
+                url: '/UserTasks/AddTask',
+                type: 'GET',
+                //data: { id: taskId },
+                success: function (data) {
+                    $('#modalBody').html(data);
+                    $('#taskDetailsModal').modal('show');
+                },
+                error: function () {
+                    alert('Error occurred while fetching data.');
+                }
+            });
+
+        }
+        function filterTasks(startDate, endDate) {
+            $.ajax({
+                url: '/UserTasks/PartialFilteredTasks',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate },
+                success: function (data) {
+                    //$('#TaskTable tbody').empty();
+                    $('#TasksTable').html(data);
+
+                },
+                error: function () {
+                    alert('Error occurred while fetching data.');
+                }
+
+
+            });
+
+        }
+
+    </script>
+}

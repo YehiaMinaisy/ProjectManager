@@ -1,0 +1,62 @@
+﻿@model Project
+
+
+<form method="post">
+    <input asp-for="ProjectId" hidden />
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class=" text-primary">Delete Project</h2>
+        </div>
+        <div class="mb-3 row pt-1">
+            <label asp-for="ProjectName" class="text-black p-0">Name</label>
+            <input asp-for="ProjectName" class=" form-control" disabled />
+
+
+        </div>
+        <div class="mb-3 row pt-1">
+            <label asp-for="ProjectDescription" class="text-black p-0">Description</label>
+            <input asp-for="ProjectDescription" class=" form-control" disabled />
+
+
+        </div>
+        @if (Model.Tasks.Count > 0)
+        {
+            <div class="mb-3 row pt-1">
+                <label asp-for="Tasks" class="text-black p-0"></label>
+                @{
+
+                    var last = Model.Tasks.Last();
+                    foreach (var task in Model.Tasks)
+                    {
+                        if (task == last)
+                        {
+                            <text>
+
+                                @task.Name
+
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                @task.Name -
+                            </text>
+                        }
+
+                    }
+                }
+
+            </div>
+        }
+
+        
+
+        <div class="row justify-content-center">
+            <div class="col-6  col-md-3 ">
+                <a asp-controller="Projects" asp-action="Index" class="border btn btn-outline-secondary form-control">
+                    Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</form>

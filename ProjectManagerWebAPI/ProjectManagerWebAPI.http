@@ -1,0 +1,6 @@
+@ProjectManagerWebAPI_HostAddress = http://localhost:5258
+
+GET {{ProjectManagerWebAPI_HostAddress}}/Task/
+Accept: application/json
+
+###

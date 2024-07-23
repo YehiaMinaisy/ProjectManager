@@ -1,0 +1,183 @@
+﻿@model ProjectTask
+
+@{
+    ViewData["Title"] = "Details";
+}
+<!-- Modal -->
+<div>
+    @* <div class="modal fade" id="subTaskDetailsModal" role="dialog" tabindex="-1" data-url="@Url.Action("PartialSubTaskDetails", "ProjectTasks")" aria-labelledby="employeeModalLabel" aria-hidden="true" > *@
+    <div class="modal fade" id="taskDetailsModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskDetailsModalLabel">Task Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    @* <span aria-hidden="true">&times;</span> *@
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- The partial view content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1>Details</h1>
+
+
+<h4>ProjectTask</h4>
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Name)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Name)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Description)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Description)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.DueDate)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.DueDate)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Project)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Project.ProjectName)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Parent)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Parent.Name)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.AttachmentName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.AttachmentName)
+    </dd>
+
+    @if (Model.SubTasks.Count > 0)
+    {
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SubTasks)
+        </dt>
+        <dd class="col-sm-10">
+
+            @{
+                var last = Model.SubTasks.Last();
+                foreach (var task in Model.SubTasks)
+                {
+                    if (task == last)
+                    {
+                        <text>
+                            <a class="btn-block" onclick="openTaskDetailsModal(@task.Id)" type="button">
+                                @task.Name
+                            </a>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            <a class="btn-block" onclick="openTaskDetailsModal(@task.Id)" style="cursor:pointer;">
+                                @task.Name
+                            </a> -
+                        </text>
+                    }
+
+                }
+            }
+
+        </dd>
+    }
+    @if (Model.Users.Count > 0)
+    {
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Users)
+        </dt>
+        <dd class="col-sm-10">
+
+            @{
+                var last = Model.Users.Last();
+                foreach (var user in Model.Users)
+                {
+                    if (user == last)
+                    {
+                        <text>
+                            <a class="btn-block" type="button">
+                                @user.UserName
+                            </a>
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            <a class="btn-block" style="cursor:pointer;">
+                                @user.UserName
+                            </a> -
+                        </text>
+                    }
+
+                }
+            }
+
+        </dd>
+    }
+
+
+</dl>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        function openTaskDetailsModal(taskId) {
+            $.ajax({
+                url: '/ProjectTasks/PartialSubTaskDetails',
+                type: 'GET',
+                data: { id: taskId },
+                success: function (data) {
+                    $('#modalBody').html(data);
+                    $('#taskDetailsModal').modal('show');
+                },
+                error: function () {
+                    alert('Error occurred while fetching data.');
+                }
+            });
+
+        }
+
+    </script>
+
+
+
+}
+
+@*
+function displaySubTaskDetails() {
+            var url = $('#subTaskDetailsModal').data('url');
+            $.get(url, function (data) {
+                $("#subTaskDetailsModal").html(data);
+                $("#subTaskDetailsModal").show('modal');
+            });
+
+
+
+        } *@
